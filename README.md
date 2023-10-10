@@ -6,4 +6,4 @@
   GitHub: [https://github.com/YohanesSenbeto](https://github.com/YohanesSenbeto)
 
 - Eyob Assefa
-  GitHub: []()
+  GitHub: [https://github.com/eyobsis](https://github.com/eyobsis)

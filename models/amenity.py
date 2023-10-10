@@ -1,0 +1,2 @@
+class Amenity(BaseModel):
+    name = ""
