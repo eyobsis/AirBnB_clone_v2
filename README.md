@@ -5,5 +5,5 @@
 - Yohanes Senbeto
   GitHub: [https://github.com/YohanesSenbeto](https://github.com/YohanesSenbeto)
 
-- Eyob Assefa
+- Eyob Sisay
   GitHub: [https://github.com/eyobsis](https://github.com/eyobsis)
