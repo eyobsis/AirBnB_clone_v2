@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""this is a command interface for air bnb project"""
+""" command interface for air bnb project"""
 
 import cmd
 
@@ -14,9 +14,10 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """End of file(EOF)"""
         return True
+
     def emptyline(self):
         """Do nothing when an empty line is entered"""
-        pass
+    pass
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel, saves it, and prints the id"""
@@ -99,31 +100,31 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         if not arg:
-            print("** class name missing **")
+            print("** A class name missing **")
             return
 
         args = arg.split()
         class_name = args[0]
         if class_name not in models.classes:
-            print("** class doesn't exist **")
+            print("** A class doesn't exist **")
             return
 
         if len(args) < 2:
-            print("** instance id missing **")
+            print("** A instance id missing **")
             return
 
         instance_id = args[1]
         key = class_name + '.' + instance_id
         if key not in models.storage.all():
-            print("** no instance found **")
+            print("** A no instance found **")
             return
 
         if len(args) < 3:
-            print("** attribute name missing **")
+            print("** A attribute name missing **")
             return
 
         if len(args) < 4:
-            print("** value missing **")
+            print("** A value missing **")
             return
 
         attribute_name = args[2]
