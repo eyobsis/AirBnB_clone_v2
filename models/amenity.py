@@ -3,7 +3,7 @@
 The `amenity` module - Amenity class for representing amenities.
 """
 
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):

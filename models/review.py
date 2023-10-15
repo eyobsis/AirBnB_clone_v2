@@ -8,7 +8,7 @@ Class:
     Review:
          review with attributes such as place ID, user ID, and text.
 """
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 
 class Review(BaseModel):

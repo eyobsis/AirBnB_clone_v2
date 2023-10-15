@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-Module: file_storage.py
-
-defines the FileStorage class, a file-based storage system for objects.
-
-"""
 import json
 import os.path
 from models.base_model import BaseModel
@@ -14,6 +8,16 @@ from models.amenity import Amenity
 from models.state import State
 from models.city import City
 from models.review import Review
+"""
+Module: file_storage.py
+
+This module defines the FileStorage class, which represents a file-based
+storage system for objects.
+
+Classes:
+    FileStorage:
+        Represents a file-based storage system for objects.
+"""
 
 
 class FileStorage:
@@ -21,9 +25,11 @@ class FileStorage:
     Represents a file-based storage system for objects.
 
     Attributes:
-        __file_path (str): The path to the JSON file objects.
+        __file_path (str): The path to the JSON file for storing serialized
+        objects.
         __objects (dict): A dictionary that stores all the created objects.
-        classes (dict): A dictionary mapping class names.
+        classes (dict): A dictionary mapping class names to their corresponding
+        classes.
     """
 
     __file_path = "file.json"
@@ -40,26 +46,27 @@ class FileStorage:
 
     def all(self, cls=None):
         """
-        Returns a dictionary of all objects or
-        a dictionary of objects filtered by class.
+        Returns a dictionary of all objects or a dictionary of objects filtered
+        by class.
 
         Args:
-            cls (type, optional): The class to filter the objects.
-                                  DEfaults to  None.
+            cls (type, optional): The class to filter the objects. Defaults to
+            None.
+
         Returns:
-            dict: A dictionary of all objects or
-            a dictionary of objects filtered by class.
+            dict: A dictionary of all objects or a dictionary of objects
+            filtered by class.
         """
         if cls is None:
-            return len(self.__objects)
+            return self.__objects
         else:
-            count = 0
-            for obj in self.__objects.values():
+            filtered_objects = {}
+            for obj_id, obj in self.__objects.items():
                 if isinstance(obj, cls):
-                    count += 1
-            return count
-    def new(self, obj):
+                    filtered_objects[obj_id] = obj
+            return filtered_objects
 
+    def new(self, obj):
         """
         Sets the given object in __objects with key <obj class name>.id.
 
@@ -67,8 +74,8 @@ class FileStorage:
             obj (object): The object to be set in __objects.
         """
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
-
         self.__objects[key] = obj
+
     def save(self):
         """
         Serializes __objects to the JSON file.
@@ -78,8 +85,8 @@ class FileStorage:
             serialized_objects[key] = obj.to_dict()
         with open(self.__file_path, 'w') as file:
             json.dump(serialized_objects, file)
-    def reload(self):
 
+    def reload(self):
         """
         Deserializes the JSON file to __objects.
         """
@@ -92,24 +99,21 @@ class FileStorage:
                     if cls is not None:
                         obj = cls(**obj_dict)
                         self.__objects[key] = obj
-
         except FileNotFoundError:
             pass
 
     def count(self, cls=None):
         """
-        Returns the number of objects in storage or 
-        the number of objects filtered by class.
+        Returns the number of objects in storage or the number of objects
+        filtered by class.
 
         Args:
-            cls (type, optional): The class to filter the objects.
-                                  Defaults to None.
+            cls (type, optional): The class to filter the objects. Defaults to
+            None.
 
         Returns:
-            int: The number of obj
-            ects in storage or 
-
-            the number of objects filtered by class.
+            int: The number of objects in storage or the number of objects
+            filtered by class.
         """
         if cls is None:
             return len(self.__objects)
@@ -118,29 +122,22 @@ class FileStorage:
             for obj in self.__objects.values():
                 if isinstance(obj, cls):
                     count += 1
-        return count
-    def serialize(self):
+            return count
 
-        
+    def serialize(self):
         """
-        Serializes the objects stored in the __objects attribute to a JSON file.
+        Serializes objects stored in the __objects attribute to a JSON file.
         """
         serialized_objects = {}
         for obj_id, obj in self.__objects.items():
             serialized_objects[obj_id] = obj.to_dict()
         with open(self.__file_path, 'w', encoding='utf-8') as file:
             json.dump(serialized_objects, file)
-        """
-        Deserializes the JSON file to recreate the objects 
-        and store them in the __objects attribute.
-        """
-        if os.path.exists(self.__file_path):
+
     def deserialize(self):
-
-
         """
-        Deserializes the JSON file to recreate the objects 
-        and store them in the __objects attribute.
+        Deserializes the JSON file to recreate the objects and store them in
+        the __objects attribute.
         """
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r', encoding='utf-8') as file:

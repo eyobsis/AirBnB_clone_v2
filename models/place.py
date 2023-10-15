@@ -5,7 +5,7 @@ Module: place.py
 Which defines the Place class, which represents a place or location.
 """
 
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 
 class Place(BaseModel):

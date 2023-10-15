@@ -5,7 +5,7 @@ Module: state.py
 defines z State class, which represents a state.
 
 """
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 
 class State(BaseModel):
