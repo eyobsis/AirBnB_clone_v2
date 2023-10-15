@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """An amenity in the application."""
+    """An amenity in the application """
 
     name = ""
     """str: Name of the amenity."""
