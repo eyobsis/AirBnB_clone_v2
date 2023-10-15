@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Defines the file storage class.
+"""
+
 import json
 import os.path
 from models.base_model import BaseModel
@@ -8,33 +12,20 @@ from models.amenity import Amenity
 from models.state import State
 from models.city import City
 from models.review import Review
-"""
-Module: file_storage.py
-
-This module defines the FileStorage class, which represents a file-based
-storage system for objects.
-
-Classes:
-    FileStorage:
-        Represents a file-based storage system for objects.
-"""
-
 
 class FileStorage:
-    """
-    Represents a file-based storage system for objects.
-
+    """ Represents a file-based storage system for objects
     Attributes:
         __file_path (str): The path to the JSON file for storing serialized
         objects.
         __objects (dict): A dictionary that stores all the created objects.
         classes (dict): A dictionary mapping class names to their corresponding
-        classes.
-    """
+        """
 
     __file_path = "file.json"
     __objects = {}
     classes = {
+    
         "BaseModel": BaseModel,
         "User": User,
         "Place": Place,
@@ -43,7 +34,7 @@ class FileStorage:
         "City": City,
         "Review": Review,
     }
-
+    
     def all(self, cls=None):
         """
         Returns a dictionary of all objects or a dictionary of objects filtered

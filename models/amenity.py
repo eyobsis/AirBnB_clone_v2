@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The `amenity` module - Amenity class for representing amenities.
+The Amenity module - Amenity class for representing amenities.
 """
 
 from models.base_model import BaseModel

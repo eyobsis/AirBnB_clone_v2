@@ -2,6 +2,7 @@
 """ command interface for air bnb project"""
 import cmd
 import sys
+import re 
 import models
 from models.user import User
 from models.engine import file_storage
@@ -11,7 +12,7 @@ from models.place import Place
 from models.amenity import Amenity
 from models.state import State
 from models.city import City
-from models.review import  Review
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
