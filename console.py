@@ -2,7 +2,7 @@
 """ command interface for air bnb project"""
 import cmd
 import sys
-import re 
+import re
 import models
 from models.user import User
 from models.engine import file_storage

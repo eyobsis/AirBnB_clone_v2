@@ -13,7 +13,9 @@ from models.state import State
 from models.city import City
 from models.review import Review
 
+
 class FileStorage:
+
     """ Represents a file-based storage system for objects
     Attributes:
         __file_path (str): The path to the JSON file for storing serialized
@@ -21,20 +23,18 @@ class FileStorage:
         __objects (dict): A dictionary that stores all the created objects.
         classes (dict): A dictionary mapping class names to their corresponding
         """
-
     __file_path = "file.json"
     __objects = {}
     classes = {
-    
-        "BaseModel": BaseModel,
-        "User": User,
-        "Place": Place,
-        "Amenity": Amenity,
-        "State": State,
-        "City": City,
-        "Review": Review,
+            "BaseModel": BaseModel,
+            "User": User,
+            "Place": Place,
+            "Amenity": Amenity,
+            "State": State,
+            "City": City,
+            "Review": Review,
     }
-    
+
     def all(self, cls=None):
         """
         Returns a dictionary of all objects or a dictionary of objects filtered
