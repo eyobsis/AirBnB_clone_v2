@@ -37,9 +37,12 @@ class BaseModel:
             for key, val in kwargs.items():
                 if key != '__class__':
                     if key in ['created_at', 'updated_at']:
-                        val = datetime.strptime(val, '%Y-%m-%dT%H:%M:%S.%f')
+                        val = datetime.datetime.strptime(val, '%Y-%m-%dT%H:%M:%S.%f')
                     setattr(self, key, val)
         else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
             models.storage.new(self)
 
     def __str__(self):
@@ -58,7 +61,7 @@ class BaseModel:
         """
         Updates the `updated_at` attribute to the current date and time.
         """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.datetime.now()
         models.storage.save()
         models.storage.new(self)
 
@@ -74,3 +77,4 @@ class BaseModel:
         data['created_at'] = self.created_at.isoformat()
         data['updated_at'] = self.updated_at.isoformat()
         return data
+

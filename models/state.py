@@ -12,13 +12,6 @@ class State(BaseModel):
     """
     Represents a state with attributes such as name.
     """
-    name = ""
-
-    def __init__(self):
-        """
-        Initializes a new instance of the State class.
-
-        Attributes:
-            name (str): The name of the state.
-        """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.name = ""
