@@ -5,6 +5,7 @@ from models.amenity import Amenity
 from models.state import State
 from models.city import City
 from models.review import Review
+from models.user import User
 """
 This module initiates a FileStorage instance and reloads it from a file
 (if it exists).
@@ -19,13 +20,15 @@ storage.reload()
 
 classes = {
     'BaseModel': BaseModel,
+    'User': User,
     'State': State,
     'City': City,
     'Place': Place,
     'Amenity': Amenity,
     'Review': Review,
 }
+
+
 class Place(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
