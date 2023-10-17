@@ -20,6 +20,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, arg):
         """Quit command to exit program"""
+        sys.exit()
         return True
 
     def do_EOF(self, arg):
@@ -111,6 +112,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         if not arg:
+
             print("** A class name missing **")
             return
 
@@ -144,7 +146,33 @@ class HBNBCommand(cmd.Cmd):
         instance = models.storage.all()[key]
         setattr(instance, attribute_name, attribute_value)
         instance.save()
+        
+    def postcmd(self, stop, line):
+        """Called after a command is executed"""
+        if not sys.stdin.isatty():
+            return True
+
+    def preloop(self):
+        """Initialization before prompting user for commands"""
+        if not sys.stdin.isatty():
+            self.use_rawinput = False
+
+    def cmdloop_with_keyboard_interrupt(self):
+        try:
+            self.cmdloop()
+        except KeyboardInterrupt:
+            print("\n")
+
+    def run_command(self, command):
+        self.cmdqueue.append(command)
+        self.cmdloop_with_keyboard_interrupt()
 
 
 if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+    if len(sys.argv) == 1:
+        HBNBCommand().cmdloop_with_keyboard_interrupt()
+    else:
+        with open(sys.argv[1], 'r') as file:
+            commands = file.readlines()
+            command_string = ''.join(commands)
+            HBNBCommand().run_command(command_string)
