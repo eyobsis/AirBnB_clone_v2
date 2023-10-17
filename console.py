@@ -1,58 +1,48 @@
 #!/usr/bin/python3
-""" command interface for air bnb project"""
+"""Command interpreter module"""
 import cmd
-import sys
-import re
 import models
-from models.user import User
-from models.engine import file_storage
-import json
 from models.base_model import BaseModel
-from models.place import Place
-from models.amenity import Amenity
-from models.state import State
-from models.city import City
-from models.review import Review
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
-    prompt = "(hbnb)"
+    """Command interpreter class"""
+    prompt = "(hbnb) "
 
     def do_quit(self, arg):
-        """Quit command to exit program"""
-        sys.exit()
+        """Quit command to exit the program"""
         return True
 
     def do_EOF(self, arg):
-        """End of file(EOF)"""
+        """EOF command to exit the program"""
         return True
 
     def emptyline(self):
-        """Do nothing when an empty line is entered"""
-    pass
+        """Empty line"""
+        pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel, saves it, and prints the id"""
+        """Creates a new instance of BaseModel"""
         if not arg:
             print("** class name missing **")
             return
 
-        class_name = arg
-        if class_name not in models.classes:
+        if arg not in models.classes:
             print("** class doesn't exist **")
             return
 
-        instance = models.classes[class_name]()
-        instance.save()
-        print(instance.id)
+        new_instance = models.classes[arg]()
+        new_instance.save()
+        print(new_instance.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance"""
-        if not arg:
+        args = arg.split()
+        if not args:
             print("** class name missing **")
             return
 
-        args = arg.split()
         class_name = args[0]
         if class_name not in models.classes:
             print("** class doesn't exist **")
@@ -63,20 +53,19 @@ class HBNBCommand(cmd.Cmd):
             return
 
         instance_id = args[1]
-        key = class_name + '.' + instance_id
-        if key not in models.storage.all():
+        key = class_name + "." + instance_id
+        if key in storage.all():
+            print(storage.all()[key])
+        else:
             print("** no instance found **")
-            return
-
-        print(models.storage.all()[key])
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id"""
-        if not arg:
+        """Deletes an instance"""
+        args = arg.split()
+        if not args:
             print("** class name missing **")
             return
 
-        args = arg.split()
         class_name = args[0]
         if class_name not in models.classes:
             print("** class doesn't exist **")
@@ -87,92 +76,80 @@ class HBNBCommand(cmd.Cmd):
             return
 
         instance_id = args[1]
-        key = class_name + '.' + instance_id
-        if key not in models.storage.all():
+        key = class_name + "." + instance_id
+        if key in storage.all():
+            storage.all().pop(key)
+            storage.save()
+        else:
             print("** no instance found **")
-            return
-
-        del models.storage.all()[key]
-        models.storage.save()
 
     def do_all(self, arg):
-        """Prints all string representations of all instances"""
-        if not arg:
-            instances = models.storage.all().values()
+        """Prints all string representation of all instances"""
+        args = arg.split()
+        if not args:
+            instances = storage.all()
+        elif args[0] in models.classes:
+            instances = storage.all(models.classes[args[0]])
         else:
-            class_name = arg
-            if class_name not in models.classes:
-                print("** class doesn't exist **")
-                return
-            instances = [v for k, v in models.storage.all().items()
-                         if class_name in k]
-
-        print([str(instance) for instance in instances])
-
-    def do_update(self, arg):
-        """Updates an instance based on the class name and id"""
-        if not arg:
-
-            print("** A class name missing **")
+            print("** class doesn't exist **")
             return
 
+        print("[", end="")
+        print(", ".join(str(instance) for instance in instances.values()), end="")
+        print("]")
+
+    def do_update(self, arg):
+        """Updates an instance"""
         args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
+
         class_name = args[0]
         if class_name not in models.classes:
-            print("** A class doesn't exist **")
+            print("** class doesn't exist **")
             return
 
         if len(args) < 2:
-            print("** A instance id missing **")
+            print("** instance id missing **")
             return
 
         instance_id = args[1]
-        key = class_name + '.' + instance_id
-        if key not in models.storage.all():
-            print("** A no instance found **")
+        key = class_name + "." + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
             return
 
         if len(args) < 3:
-            print("** A attribute name missing **")
+            print("** attribute name missing **")
             return
 
         if len(args) < 4:
-            print("** A value missing **")
+            print("** value missing **")
             return
 
         attribute_name = args[2]
         attribute_value = args[3]
 
-        instance = models.storage.all()[key]
+        instance = storage.all()[key]
         setattr(instance, attribute_name, attribute_value)
         instance.save()
-        
-    def postcmd(self, stop, line):
-        """Called after a command is executed"""
-        if not sys.stdin.isatty():
-            return True
 
-    def preloop(self):
-        """Initialization before prompting user for commands"""
-        if not sys.stdin.isatty():
-            self.use_rawinput = False
+    def do_count(self, arg):
+        """Retrieves the number of instances of a class"""
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
 
-    def cmdloop_with_keyboard_interrupt(self):
-        try:
-            self.cmdloop()
-        except KeyboardInterrupt:
-            print("\n")
+        class_name = args[0]
+        if class_name not in models.classes:
+            print("** class doesn't exist **")
+            return
 
-    def run_command(self, command):
-        self.cmdqueue.append(command)
-        self.cmdloop_with_keyboard_interrupt()
+        instances = storage.all(models.classes[class_name])
+        print(len(instances))
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        HBNBCommand().cmdloop_with_keyboard_interrupt()
-    else:
-        with open(sys.argv[1], 'r') as file:
-            commands = file.readlines()
-            command_string = ''.join(commands)
-            HBNBCommand().run_command(command_string)
+    HBNBCommand().cmdloop()
