@@ -27,13 +27,13 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
     classes = {
-            "BaseModel": BaseModel,
-            "User": User,
-            "Place": Place,
-            "Amenity": Amenity,
-            "State": State,
-            "City": City,
-            "Review": Review,
+        "BaseModel": BaseModel,
+        "User": User,
+        "Place": Place,
+        "Amenity": Amenity,
+        "State": State,
+        "City": City,
+        "Review": Review,
     }
 
     def all(self, cls=None):
@@ -89,7 +89,11 @@ class FileStorage:
                     class_name, obj_id = key.split('.')
                     cls = self.classes.get(class_name)
                     if cls is not None:
-                        obj = cls(**obj_dict)
+                        if class_name == "User":
+                            obj = cls()
+                            obj.__dict__.update(obj_dict)
+                        else:
+                            obj = cls(**obj_dict)
                         self.__objects[key] = obj
         except FileNotFoundError:
             pass
@@ -124,7 +128,7 @@ class FileStorage:
         for obj_id, obj in self.__objects.items():
             serialized_objects[obj_id] = obj.to_dict()
         with open(self.__file_path, 'w', encoding='utf-8') as file:
-            json.dump(serialized_objects, file)
+            json.dump(serialized_objects, file, indent=4)
 
     def deserialize(self):
         """
@@ -138,5 +142,9 @@ class FileStorage:
                     class_name = obj_dict['__class__']
                     cls = self.classes.get(class_name)
                     if cls is not None:
-                        obj = cls(**obj_dict)
+                        if class_name == "User":
+                            obj = cls()
+                            obj.__dict__.update(obj_dict)
+                        else:
+                            obj = cls(**obj_dict)
                         self.__objects[obj_id] = obj

@@ -98,6 +98,31 @@ class HBNBCommand(cmd.Cmd):
         print(", ".join(str(instance) for instance in instances.values()), end="")
         print("]")
 
+        
+    def precmd(self, line):
+        """Preprocess the command line to handle <class name>.all(), <class name>.count(), <class name>.show(<id>), <class name>.destroy(<id>), and <class name>.update(<id>, <attribute dict>) syntax"""
+        parts = line.split('.')
+        if len(parts) == 2:
+            class_name, method = parts
+            if method == 'all()':
+                return 'all ' + class_name
+            elif method == 'count()':
+                return 'count ' + class_name
+            elif method.startswith('show(') and method.endswith(')'):
+                obj_id = method[5:-1]
+                return 'show ' + class_name + ' ' + obj_id
+            elif method.startswith('destroy(') and method.endswith(')'):
+                obj_id = method[8:-1]
+                return 'destroy ' + class_name + ' ' + obj_id
+            elif method.startswith('update(') and method.endswith(')'):
+                update_args = method[7:-1]
+                update_args_list = update_args.split(', ', 1)
+                if len(update_args_list) == 2:
+                    obj_id = update_args_list[0].strip('"')
+                    attribute_dict_str = update_args_list[1].strip('{}')
+                    return 'update ' + class_name + ' ' + obj_id + ' ' + attribute_dict_str
+        return line
+
     def do_update(self, arg):
         """Updates an instance"""
         args = arg.split()
