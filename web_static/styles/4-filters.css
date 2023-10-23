@@ -4,6 +4,9 @@
     width: 100%;
     border: 1px #DDDDDD solid;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content:right;
 }
 
 .search-button {
@@ -14,8 +17,7 @@
     width: 20%;
     border: none;
     border-radius: 4px;
-    margin-right: 30px;
-    margin-top: 11px;
+    margin-right: 10px;
     opacity: 1;
     transition: opacity 0.3s;
 }
