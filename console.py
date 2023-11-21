@@ -23,16 +23,45 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """Creates a new instance with given parameters"""
         if not arg:
             print("** class name missing **")
             return
 
-        if arg not in models.classes:
+        args = arg.split()
+        class_name = args[0]
+        if class_name not in models.classes:
             print("** class doesn't exist **")
             return
 
-        new_instance = models.classes[arg]()
+        params = {}
+        for param in args[1:]:
+            param_parts = param.split("=")
+            if len(param_parts) != 2:
+                # Skip parameters that don't fit the required syntax
+                continue
+            key, value = param_parts
+            value = value.replace("_", " ")  # Replace underscores with spaces in string values
+            if value.startswith('"') and value.endswith('"'):
+                # String value
+                value = value[1:-1].replace('\\"', '"')  # Handle escaped double quotes
+            elif "." in value:
+                # Float value
+                try:
+                    value = float(value)
+                except ValueError:
+                    # Skip invalid float values
+                    continue
+            else:
+                # Integer value
+                try:
+                    value = int(value)
+                except ValueError:
+                    # Skip invalid integer values
+                    continue
+            params[key] = value
+
+        new_instance = models.classes[class_name](**params)
         new_instance.save()
         print(new_instance.id)
 
@@ -98,7 +127,6 @@ class HBNBCommand(cmd.Cmd):
         print(", ".join(str(instance) for instance in instances.values()), end="")
         print("]")
 
-        
     def precmd(self, line):
         """Preprocess the command line to handle <class name>.all(), <class name>.count(), <class name>.show(<id>), <class name>.destroy(<id>), and <class name>.update(<id>, <attribute dict>) syntax"""
         parts = line.split('.')
