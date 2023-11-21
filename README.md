@@ -1,92 +1,28 @@
-#Welcome to the AirBnB clone project!
+#Welcome to the AirBnB clone - MySQL!
 
-# AirBnB Clone Command Interpreter
-
-This project creates a command line interface (CLI) to manage objects for the AirBnB rental property platform. 
-It implements object relational mapping (ORM) functionality through a basic command interpreter.
-
-## Overview
-
-The CLI allows users to:
-
-- Create, update, retrieve and delete objects representing core AirBnB listings and users
-- Persist objects to a file-based storage engine for durability
-- Retrieve and display objects through a simple interactive session
-- Support input/output via pipes for non-interactive usage
-
-Object classes follow inheritance through the BaseModel parent class to centralize common functionality like serialization/deserialization.
-
-Unit tests validate core functionality and ensure changes don't break existing features. The code adheres to PEP 8 style guidelines for readability and consistency.
-
-## Installation
-
-1. Clone the repository:
-
-```
-git clone https://github.com/your-username/AirBnB_clone.git
-``` 
-
-2. Navigate to the project directory:
-
-```
-cd AirBnB_clone
-```
-
-3. Install dependencies (optional if running directly): 
-
-```
-pip install -r requirements.txt
-```
-
-## Usage
-
-Run the command interpreter in interactive mode:
-
-```
-./console.py
-```
-
-Or pipe commands in non-interactive mode:
-
-```
-echo "help" | ./console.py 
-```
-
-## Commands
-
-See the `help` command for full usage details of all available CRUD commands.
-
-## Classes
-
-The core object classes are:
-
-- `BaseModel` 
-- `User`
-- `State`  
-- `City`
-- `Place`
-- `Amenity`
-- `Review`
-
-## Testing
-
-Run all tests:
-
-```
-python3 -m unittest discover tests
-``` 
-
-Or individual test files like `test_base_model.py`.
-
-## Future Improvements
-
-Some ideas for future enhancements:
-
-- Add SQL database storage with SQLAlchemy 
-- Implement CRUD API endpoints with Flask
-- Add front-end interface with JavaScript
-- Add additional object types like reservations
-- Add validation, permissions, relationships
+This repository contains the initial stage of a student project to build a clone of the AirBnB website. The project includes a backend interface, or console, to manage program data. The console allows the user to create, update, and destroy objects, as well as manage file storage. The storage is persistent between sessions using JSON serialization/deserialization. 
+ 
+To use the project, you can clone the repository and run the "console.py" file. This will start the HBnB console, where you can enter various commands to interact with the models and manipulate the data. 
+ 
+The supported commands include: 
+- help [command]: Prints helpful information about a command. 
+- quit: Closes the command interpreter. 
+- EOF: Closes the command interpreter. 
+- create Model [prop_key=prop_value]...: Creates a new instance of the Model class with the given properties. 
+- count Model: Prints the number of instances of the Model class. 
+- show Model id: Prints the string representation of an instance of the Model class with the given id. 
+- destroy Model id: Deletes an instance of the Model class with the given id. 
+- all [Model]: Prints a list containing the string representation of all instances of the Model class. 
+- update Model id attr_name attr_value: Updates an instance of the Model class with the given id by assigning the attribute value attr_value to its attribute named attr_name. 
+- update Model id dict_repr: Updates an instance of the Model class with the given id by storing the key, value pairs in the given dictionary as its attributes. 
+ 
+The supported models include BaseModel, User, State, City, Amenity, Place, and Review. 
+ 
+There are also some environment variables that can be set to configure the project, such as HBNB_ENV, HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB, and HBNB_TYPE_STORAGE. 
+ 
+The examples provided show the syntax and usage of the commands in the console for creating, showing, destroying, and updating objects. 
+ 
+Before pushing any commits, it is recommended to run the script ./test.bash to ensure that no tests are failing and the code complies with the project's styling standard.
 
 ## Contributing
 
