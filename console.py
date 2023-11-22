@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" A Console Module """
+""" Console Module """
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -328,3 +328,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
