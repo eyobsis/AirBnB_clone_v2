@@ -1,17 +1,8 @@
-#!/usr/bin/env python3
-"""
-Module: state.py
-
-defines z State class, which represents a state.
-
-"""
+#!/usr/bin/python3
+""" State Module for HBNB project """
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """
-    Represents a state with attributes such as name.
-    """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = ""
+    """ State class """
+    name = ""

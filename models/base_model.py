@@ -1,78 +1,44 @@
 #!/usr/bin/python3
-"""
-Define the BaseModel class and returns json data
-"""
-from datetime import datetime
+"""This module defines a base class for all models in our hbnb clone"""
 import uuid
-import models
+from datetime import datetime
 
 
 class BaseModel:
-    """
-    The `BaseModel` class represents a basic model with common attributes
-    and methods used in the application.
-
-    Attributes:
-        id (str): A unique identifier for the instance.
-        created_at (datetime): The datetime when the instance was created.
-        updated_at (datetime): The datetime when the instance was last updated.
-
-    Methods:
-        __init__(self, *args, **kwargs):
-            Initializes a new instance of `BaseModel`.
-
-        __str__(self):
-            Returns a string representation of the instance.
-
-        save(self):
-            Updates the `updated_at` attribute to the current date and time.
-
-        to_dict(self):
-            Converts the instance to a dictionary for serialization.
-
-    """
-
+    """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
-        if kwargs:
-            for key, val in kwargs.items():
-                if key != '__class__':
-                    if key in ['created_at', 'updated_at']:
-                        val = datetime.strptime(val, '%Y-%m-%dT%H:%M:%S.%f')
-                    setattr(self, key, val)
-        else:
+        """Instatntiates a new model"""
+        if not kwargs:
+            from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            models.storage.new(self)
+            storage.new(self)
+        else:
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']
+            self.__dict__.update(kwargs)
 
     def __str__(self):
-        """
-        Returns a formatted string representation of the instance.
-
-        Returns:
-            str: A string represent in the format "[Class] (ID) Attributes".
-        """
-        a = self.__class__.__name__
-        b = self.id
-        c = self.__dict__
-        return "[{}] ({}) {}".format(a, b, c)
+        """Returns a string representation of the instance"""
+        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
-        """
-        Updates the `updated_at` attribute to the current date and time.
-        """
+        """Updates updated_at with current time when instance is changed"""
+        from models import storage
         self.updated_at = datetime.now()
-        models.storage.save()
+        storage.save()
 
     def to_dict(self):
-        """
-        Converts our instance to a dictionary for serialization.
-
-        Returns:
-            dict: A dictionary representation of instance's attributes.
-        """
-        the_data = self.__dict__.copy()
-        the_data['__class__'] = self.__class__.__name__
-        the_data['created_at'] = self.created_at.isoformat()
-        the_data['updated_at'] = self.updated_at.isoformat()
-        return the_data
+        """Convert instance into dict format"""
+        dictionary = {}
+        dictionary.update(self.__dict__)
+        dictionary.update({'__class__':
+                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+        dictionary['created_at'] = self.created_at.isoformat()
+        dictionary['updated_at'] = self.updated_at.isoformat()
+        return dictionary

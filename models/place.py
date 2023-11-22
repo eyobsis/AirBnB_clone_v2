@@ -1,20 +1,10 @@
-#!/usr/bin/env python3
-"""
-Module: place module
-
-Which defines the Place class, which represents a place or location.
-"""
-
+#!/usr/bin/python3
+""" Place Module for HBNB project """
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """
-    class with various attributes such as city ID, user ID,
-    name, description, number of rooms, number of bathrooms, maximum guests,
-    price per night, latitude, longitude, and a list of amenity IDs.
-    """
-
+    """ A place to stay """
     city_id = ""
     user_id = ""
     name = ""
