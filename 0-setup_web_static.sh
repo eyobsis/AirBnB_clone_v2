@@ -21,8 +21,8 @@ echo "<html>
 # Create the desired symbolic link structure
 sudo ln -sf /data/web_static/releases/test /data/web_static/current
 
-# Set ownership for the directories
-sudo chown -R ubuntu:ubuntu /data/web_static
+# Set ownership for the directories - Use www-data instead of ubuntu:ubuntu
+sudo chown -R www-data:www-data /data/web_static
 
 # Update Nginx configuration
 config="server {
@@ -43,6 +43,7 @@ config="server {
 sudo bash -c "echo '$config' > /etc/nginx/sites-available/default"
 
 # Restart Nginx
-sudo systemctl restart nginx
+sudo service nginx restart
 
 exit 0
+
