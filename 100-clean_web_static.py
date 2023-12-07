@@ -2,28 +2,26 @@
 """
 Fabric script that deletes out-of-date archives
 """
-from fabric.api import env, run, local
-from datetime import datetime
+from fabric.api import env, run, local, lcd, cd
 import os
 
-env.hosts = ['34.229.66.177', '34.204.101.218']  # Add your server IPs here
-env.user = 'ubuntu'  # Replace with your username
-env.key_filename = '/root/.ssh/school/id_rsa '  # Replace with your SSH private key path
+env.hosts = ['34.229.66.177', '34.204.101.218']
+env.user = 'ubuntu'
+env.key_filename = '/root/.ssh/school/id_rsa'
 
 
 def do_clean(number=0):
-    number = int(number)
-    if number < 2:
-        number = 1
+    number = max(1, int(number))
 
-    archives = sorted(os.listdir('versions'))
-    archives_to_keep = archives[-number:]
+    with lcd('versions'):
+        archives = sorted(os.listdir('.'))
+        archives_to_keep = archives[-number:]
+        arc = archives_to_keep
+        local("rm -f $(ls -1 | grep -vE '{}')".format('|'.join(arc)))
 
-    local("cd versions; rm $(ls -1 | grep -vE '{}')".format('|'.join(archives_to_keep)))
+    with cd('/data/web_static/releases'):
+        releases = run("ls -1").split()
+        releases_to_delete = sorted(releases)[:-number]
 
-    releases = run("ls -1 /data/web_static/releases").split()
-    releases_to_delete = sorted(releases)[:-number]
-
-    if len(releases_to_delete) > 0:
-        run("cd /data/web_static/releases; rm -rf {}".format(' '.join(releases_to_delete)))
-
+        if releases_to_delete:
+            run("rm -rf {}".format(' '.join(releases_to_delete)))
